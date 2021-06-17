@@ -17,6 +17,7 @@
 *.cache
 *.ncb
 *.wav
+*.opensdf
 build
 .vscode
 /pjsip-apps/src/pjsua/winrt/cli/wp8/obj/Win32/Debug/DesignTimeResolveAssemblyReferencesInput.cache
