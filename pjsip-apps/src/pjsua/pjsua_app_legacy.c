@@ -156,7 +156,9 @@ static pj_bool_t simple_input(const char *title, char *buf, pj_size_t len)
 {
     char *p;
 
-    printf("%s (empty to cancel): ", title); fflush(stdout);
+   // printf("%s (empty to cancel):%s ", title,buf);
+	printf("%s (取消按回车): ", title);
+	fflush(stdout);
     if (fgets(buf, (int)len, stdin) == NULL)
 	return PJ_FALSE;
 
@@ -227,27 +229,27 @@ static void keystroke_help()
     puts("+=============================================================================+");
     puts("|       Call Commands:         |   Buddy, IM & Presence:  |     Account:      |");
     puts("|                              |                          |                   |");
-    puts("|  m  Make new call            | +b  Add new buddy       .| +a  Add new accnt |");
+    puts("|  m  呼出                     | +b  增加联系人          .| +a  注册帐号      |");
     puts("|  M  Make multiple calls      | -b  Delete buddy         | -a  Delete accnt. |");
-    puts("|  a  Answer call              |  i  Send IM              | !a  Modify accnt. |");
-    puts("|  h  Hangup call  (ha=all)    |  s  Subscribe presence   | rr  (Re-)register |");
+    puts("|  a  应答呼叫                 |  i  发送 IM              | !a  修改账号      |");
+    puts("|  h  挂断通话  (ha=全部)      |  s  Subscribe presence   | rr  (Re-)register |");
     puts("|  H  Hold call                |  u  Unsubscribe presence | ru  Unregister    |");
     puts("|  v  re-inVite (release hold) |  t  ToGgle Online status |  >  Cycle next ac.|");
     puts("|  U  send UPDATE              |  T  Set online status    |  <  Cycle prev ac.|");
     puts("| ],[ Select next/prev call    +--------------------------+-------------------+");
     puts("|  x  Xfer call                |      Media Commands:     |  Status & Config: |");
     puts("|  X  Xfer with Replaces       |                          |                   |");
-    puts("|  #  Send RFC 2833 DTMF       | cl  List ports           |  d  Dump status   |");
+    puts("|  #  Send RFC 2833 DTMF       | cl  列出端口             |  d  Dump status   |");
     puts("|  *  Send DTMF with INFO      | cc  Connect port         | dd  Dump detailed |");
     puts("| dq  Dump curr. call quality  | cd  Disconnect port      | dc  Dump config   |");
-    puts("|                              |  V  Adjust audio Volume  |  f  Save config   |");
+    puts("|                              |  V  音量调整             |  f  保存配置      |");
     puts("|  S  Send arbitrary REQUEST   | Cp  Codec priorities     |                   |");
     puts("+-----------------------------------------------------------------------------+");
 #if PJSUA_HAS_VIDEO
     puts("| Video: \"vid help\" for more info                                             |");
     puts("+-----------------------------------------------------------------------------+");
 #endif
-    puts("|  q  QUIT   L  ReLoad   sleep MS   echo [0|1|txt]     n: detect NAT type     |");
+    puts("|  q  退出   L  重新加载   sleep MS   echo [0|1|txt]     n: detect NAT type   |");
     puts("+=============================================================================+");
 
     i = pjsua_call_get_count();
@@ -896,6 +898,7 @@ static void ui_answer_call()
 	}
 
 	pjsua_call_answer2(current_call, &call_opt, st_code, NULL, &msg_data_);
+	
     }
 }
 
@@ -981,12 +984,43 @@ static void ui_add_buddy()
     }
 }
 
+
+static void ui_init_buddy(char *uri)
+{
+	char buf[128];
+	strcpy(buf, uri);
+	pjsua_buddy_config buddy_cfg;
+	pjsua_buddy_id buddy_id;
+	pj_status_t status;
+
+//	if (!simple_input("Enter buddy's URI:", buf, sizeof(buf)))
+//		return;
+
+	if (pjsua_verify_url(buf) != PJ_SUCCESS) {
+		printf("Invalid URI '%s'\n", buf);
+		return;
+	}
+
+	pj_bzero(&buddy_cfg, sizeof(pjsua_buddy_config));
+
+	buddy_cfg.uri = pj_str(buf);
+	buddy_cfg.subscribe = PJ_TRUE;
+
+	status = pjsua_buddy_add(&buddy_cfg, &buddy_id);
+	if (status == PJ_SUCCESS) {
+		printf("New buddy '%s' added at index %d\n",
+			buf, buddy_id + 1);
+	}
+}
+
+
+
+
 static void ui_add_account(pjsua_transport_config *rtp_cfg)
 {
-    char id[80], registrar[80], realm[80], uname[80], passwd[30];
+	char id[80],registrar[80],realm[80],uname[80],passwd[30];
     pjsua_acc_config acc_cfg;
     pj_status_t status;
-
     if (!simple_input("Your SIP URL:", id, sizeof(id)))
 	return;
     if (!simple_input("URL of the registrar:", registrar, sizeof(registrar)))
@@ -1016,6 +1050,44 @@ static void ui_add_account(pjsua_transport_config *rtp_cfg)
 	pjsua_perror(THIS_FILE, "Error adding new account", status);
     }
 }
+
+
+static void ui_init_account(pjsua_transport_config *rtp_cfg,char **params)
+{
+
+	char id[80],registrar[80],realm[80],uname[80],passwd[30];
+	pjsua_acc_config acc_cfg;
+	pj_status_t status;
+
+
+	sprintf(id, "\"%s\" <sip:%s@%s>", params[4],params[2], params[0]);
+	sprintf(registrar, "sip:%s:%s", params[0], params[1]);
+	strcpy(uname, params[2]);
+	strcpy(passwd, params[3]);
+	strcpy(realm, "*");
+	pjsua_acc_config_default(&acc_cfg);
+	acc_cfg.id = pj_str(id);
+	acc_cfg.reg_uri = pj_str(registrar);
+	acc_cfg.cred_count = 1;
+	acc_cfg.cred_info[0].scheme = pj_str("Digest");
+	acc_cfg.cred_info[0].realm = pj_str(realm);
+	acc_cfg.cred_info[0].username = pj_str(uname);
+	acc_cfg.cred_info[0].data_type = 0;
+	acc_cfg.cred_info[0].data = pj_str(passwd);
+
+	acc_cfg.rtp_cfg = *rtp_cfg;
+	
+	app_config_init_video(&acc_cfg);
+
+	status = pjsua_acc_add(&acc_cfg, PJ_TRUE, NULL);
+	if (status != PJ_SUCCESS) {
+		pjsua_perror(THIS_FILE, "Error adding new account", status);
+	}
+}
+
+
+
+
 
 static void ui_delete_buddy()
 {
@@ -1768,9 +1840,28 @@ static void ui_handle_ip_change()
 void legacy_main(void)
 {
     char menuin[80];
-    char buf[128];
-
+    char buf[128]; 
+	pj_log_set_level(3);
     keystroke_help();
+	//===============服务器===========端口===端口=====密码==========显示名==
+	char *prm[] = { "122.10.161.183","9000","610000","Aa321321!@#","+8613512610000" };
+	
+	for (int i = 0; i < 6; ++i) {
+		int j = 601000 + i;
+		sprintf(prm[2], "%d", j);
+		sprintf(prm[4], "+8613512%d", j);
+		ui_init_account(&app_config.rtp_cfg, prm);
+	}
+	
+	ui_init_buddy("<sip:600002@122.10.161.183:9000>");
+	ui_init_buddy("<sip:600003@122.10.161.183:9000>");
+	ui_init_buddy("<sip:600004@122.10.161.183:9000>");
+	ui_init_buddy("<sip:600005@122.10.161.183:9000>");
+	ui_init_buddy("+324602020171<sip:600006@122.10.161.183:9000>");
+	ui_init_buddy("+324602020171<sip:+324602020171@122.10.161.183:9000>");
+	ui_init_buddy("<sip:600007@122.10.161.183:9000>");
+	ui_init_buddy("<sip:600008@122.10.161.183:9000>");
+//	printf("**********************************123456789*********************************************\n");//方便搜索
 
     for (;;) {
 

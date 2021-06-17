@@ -74,7 +74,10 @@ struct pjmedia_snd_port
  */
 static pj_status_t play_cb(void *user_data, pjmedia_frame *frame)
 {
-    pjmedia_snd_port *snd_port = (pjmedia_snd_port*) user_data;
+	//PCM数据
+	//printf("play----------%d------------------\n",frame->size);
+	
+	pjmedia_snd_port *snd_port = (pjmedia_snd_port*) user_data;
     pjmedia_port *port;
     const unsigned required_size = (unsigned)frame->size;
     pj_status_t status;
@@ -86,6 +89,7 @@ static pj_status_t play_cb(void *user_data, pjmedia_frame *frame)
 	goto no_frame;
 
     status = pjmedia_port_get_frame(port, frame);
+	
     if (status != PJ_SUCCESS)
 	goto no_frame;
 
@@ -144,8 +148,25 @@ static pj_status_t rec_cb(void *user_data, pjmedia_frame *frame)
 {
     pjmedia_snd_port *snd_port = (pjmedia_snd_port*) user_data;
     pjmedia_port *port;
-
-    pjmedia_clock_src_update(&snd_port->cap_clocksrc, &frame->timestamp);
+	//PCM数据
+	//printf("rec----------%d------------------\n", frame->size);
+    
+#if 0
+	unsigned char* data = (unsigned char *)frame->buf;
+	int i = 0;
+	
+	while (i != 32)
+	{
+		
+		printf("%02x ", *data);
+		++i;
+		++data;
+	}
+	printf("\n------------------------------------rec------------------------------\n");
+#endif
+	
+	
+	pjmedia_clock_src_update(&snd_port->cap_clocksrc, &frame->timestamp);
 
     /* Invoke preview callback */
     if (snd_port->on_rec_frame)

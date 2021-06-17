@@ -51,7 +51,7 @@
  * same settings (clock rate etc) as the conference bridge.
  * This should only be enabled when debugging audio quality *only*.
  */
-//#define REC_FILE    "confrec.pcm"
+#define REC_FILE    "confrec.pcm"
 #ifdef REC_FILE
 static FILE *fhnd_rec;
 #endif
@@ -2191,11 +2191,39 @@ static pj_status_t get_frame(pjmedia_port *this_port,
 
     pj_mutex_unlock(conf->mutex);
 
+	pj_uint8_t* data = (pj_int8_t*)frame->buf;
+
+	/*
+	while (!*data) ++data;
+	if (!--*data) {
+		printf("\n---------------------------------无效数据PCM-%d-------------------------------------------------------------------\n", frame->size);
+	}
+	else {
+		printf("\n---------------------------------数据PCM-%x-------------------------------------------------------------------\n", *data);
+	}
+	*/
+	
+
+	
+	/*
+	printf("\n---------------------------------PDM DATA:%d Bytes--------------------------------------------------------------------\n", frame->size);
+	for (int i = 0; i < frame->size; ++i) {
+		printf("%02x:", *data);
+		++data;
+	}
+	*/
+	
+
+
+
+
 #ifdef REC_FILE
     if (fhnd_rec == NULL)
 	fhnd_rec = fopen(REC_FILE, "wb");
     if (fhnd_rec)
+	
 	fwrite(frame->buf, frame->size, 1, fhnd_rec);
+
 #endif
 
     return PJ_SUCCESS;

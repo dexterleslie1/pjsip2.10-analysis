@@ -348,7 +348,7 @@ pjmedia_snd_port_get_clock_src( pjmedia_snd_port *snd_port,
  * sound recorder device, then this will start periodic function call to
  * the port's put_frame() function. If the sound device has a sound player
  * device, then this will start periodic function call to the port's
- * get_frame() function.
+ * rget_frame() function.
  *
  * For this version of PJMEDIA, the media port MUST have the same audio
  * settings as the sound device port, or otherwise the connection will

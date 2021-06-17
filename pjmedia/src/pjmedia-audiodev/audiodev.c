@@ -48,7 +48,7 @@ pjmedia_aud_dev_factory* pjmedia_android_factory(pj_pool_factory *pf);
 pjmedia_aud_dev_factory* pjmedia_bb10_factory(pj_pool_factory *pf);
 #endif
 
-#if PJMEDIA_AUDIO_DEV_HAS_WMME
+#if PJMEDIA_AUDIO_DEV_HAS_WMME //windows 32 接口
 pjmedia_aud_dev_factory* pjmedia_wmme_factory(pj_pool_factory *pf);
 #endif
 
@@ -121,7 +121,7 @@ PJ_DEF(pj_status_t) pjmedia_aud_subsys_init(pj_pool_factory *pf)
 #if PJMEDIA_AUDIO_DEV_HAS_PORTAUDIO
     aud_subsys->drv[aud_subsys->drv_cnt++].create = &pjmedia_pa_factory;
 #endif
-#if PJMEDIA_AUDIO_DEV_HAS_WMME
+#if PJMEDIA_AUDIO_DEV_HAS_WMME //调用windows 32 设备工厂
     aud_subsys->drv[aud_subsys->drv_cnt++].create = &pjmedia_wmme_factory;
 #endif
 #if PJMEDIA_AUDIO_DEV_HAS_BDIMAD

@@ -417,8 +417,8 @@ int main()
 
     try {
 	ep.libCreate();
-
-	mainProg1(ep);
+	std::cout << "-------------mainProg3------------- " << std::endl;
+	mainProg3(ep);
 	ret = PJ_SUCCESS;
     } catch (Error & err) {
 	std::cout << "Exception: " << err.info() << std::endl;

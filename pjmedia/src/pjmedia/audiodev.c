@@ -85,7 +85,7 @@ PJ_DEF(pj_status_t) pjmedia_aud_driver_init(unsigned drv_idx,
 
     if (!refresh && drv->create) {
 	/* Create the factory */
-	f = (*drv->create)(aud_subsys.pf);
+	f = (*drv->create)(aud_subsys.pf);//创建设备，调用 建立工厂函数 // Windws10 调用(pjmedia_wmme_factory) AAAAAAAAAAAAAAAAAAAAAAAAA
 	if (!f)
 	    return PJ_EUNKNOWN;
 

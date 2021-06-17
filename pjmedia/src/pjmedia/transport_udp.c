@@ -1005,6 +1005,16 @@ static pj_status_t transport_send_rtp( pjmedia_transport *tp,
     struct pending_write *pw;
     pj_status_t status;
 
+ /*·¢ËÍÊý¾Ý*/
+//	pj_uint8_t *data = (pj_uint8_t *)pkt;
+//	int i = 0;
+//	while (i != size) {
+//		printf("%02x ", *data);
+//		++data;
+//		++i;
+//	}
+//	printf("\n---------------%dbytes sent-------------------------------\n",(int)size);
+
     /* Must be attached */
     //PJ_ASSERT_RETURN(udp->attached, PJ_EINVALIDOP);
 

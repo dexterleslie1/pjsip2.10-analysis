@@ -2545,6 +2545,7 @@ PJ_DEF(pj_status_t) pjsua_call_answer2(pjsua_call_id call_id,
 
     PJ_ASSERT_RETURN(call_id>=0 && call_id<(int)pjsua_var.ua_cfg.max_calls,
 		     PJ_EINVAL);
+	
 
     PJ_LOG(4,(THIS_FILE, "Answering call %d: code=%d", call_id, code));
     pj_log_push_indent();

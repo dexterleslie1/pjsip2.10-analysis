@@ -1940,7 +1940,7 @@ pj_status_t pjsua_app_run(pj_bool_t wait_telnet_cli)
 	pj_thread_create(app_config.pool, "stdout", &stdout_refresh_proc,
 			 NULL, 0, 0, &stdout_refresh_thread);
     }
-
+	
     status = pjsua_start();
     if (status != PJ_SUCCESS)
 	goto on_return;

@@ -511,7 +511,7 @@ static pj_status_t get_frame( pjmedia_port *port, pjmedia_frame *frame)
     pj_int16_t *p_out_samp;
     pj_status_t status;
 
-
+	
     /* Return no frame is channel is paused */
     if (channel->paused) {
 	frame->type = PJMEDIA_FRAME_TYPE_NONE;
@@ -815,6 +815,7 @@ static pj_status_t get_frame_ext( pjmedia_port *port, pjmedia_frame *frame)
      */
 
     samples_required = PJMEDIA_PIA_SPF(&stream->port.info);
+
     samples_per_frame = stream->codec_param.info.frm_ptime *
 			stream->codec_param.info.clock_rate *
 			stream->codec_param.info.channel_cnt /
@@ -1553,6 +1554,12 @@ static pj_status_t put_frame( pjmedia_port *port,
 
     samples_per_frame = stream->enc_samples_per_pkt;
 
+
+	
+
+
+
+
     /* http://www.pjsip.org/trac/ticket/56:
      *  when input is PJMEDIA_FRAME_TYPE_NONE, feed zero PCM frame
      *  instead so that encoder can decide whether or not to transmit
@@ -1643,8 +1650,12 @@ static pj_status_t put_frame( pjmedia_port *port,
 	return status;
 
     } else {
-	return put_frame_imp(port, frame);
-    }
+	
+		
+
+		return put_frame_imp(port, frame);
+
+	}
 }
 
 
@@ -1763,6 +1774,16 @@ static void on_rx_rtp( pjmedia_tp_cb_param *param)
     pj_bool_t check_pt;
     pj_status_t status;
     pj_bool_t pkt_discarded = PJ_FALSE;
+
+   
+/*
+	pj_uint8_t *data = (pj_uint8_t *)pkt;
+	for (int i = 0; i < bytes_read; ++i) {
+		printf("%02x ", *data);
+		++data;
+	}
+	printf("\n----------------------------------RTP SIZE:%d------------------------------------------------------\n", bytes_read);
+*/
 
     /* Check for errors */
     if (bytes_read < 0) {

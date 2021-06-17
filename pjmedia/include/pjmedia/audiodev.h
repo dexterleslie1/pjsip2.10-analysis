@@ -379,8 +379,7 @@ typedef pj_status_t (*pjmedia_aud_play_cb)(void *user_data,
  * @return	    Returning non-PJ_SUCCESS will cause the audio stream
  *		    to stop
  */
-typedef pj_status_t (*pjmedia_aud_rec_cb)(void *user_data,
-					  pjmedia_frame *frame);
+typedef pj_status_t (*pjmedia_aud_rec_cb)(void *user_data,pjmedia_frame *frame);
 
 /**
  * This structure specifies the parameters to open the audio stream.

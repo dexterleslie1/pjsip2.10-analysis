@@ -71,6 +71,7 @@ static const struct
 PJ_DEF(pj_str_t) pjmedia_audiodev_strerror(pj_status_t statcode, 
 					   char *buf, pj_size_t bufsize )
 {
+	
     pj_str_t errstr;
 
 #if defined(PJ_HAS_ERROR_STRING) && (PJ_HAS_ERROR_STRING != 0)

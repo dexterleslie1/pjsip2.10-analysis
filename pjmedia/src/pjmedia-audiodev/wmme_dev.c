@@ -204,6 +204,7 @@ pjmedia_aud_dev_factory* pjmedia_wmme_factory(pj_pool_factory *pf)
     f->pf = pf;
     f->base_pool = pool;
     f->base.op = &factory_op;
+	
 
     return &f->base;
 }
@@ -747,7 +748,7 @@ static pj_status_t init_player_stream(  struct wmme_factory *wf,
     /*
      * Open wave device.
      */
-    mr = waveOutOpen(&wmme_strm->hWave.Out, 
+    mr = waveOutOpen(&wmme_strm->hWave.Out, //初始化句柄
 		     wf->dev_info[prm->play_id].deviceId,
 		     &wfx, (DWORD_PTR)wmme_strm->hEvent, 0, flag);
     if (mr != MMSYSERR_NOERROR) {
@@ -808,7 +809,8 @@ static pj_status_t init_capture_stream( struct wmme_factory *wf,
 					const pjmedia_aud_param *prm,
 					unsigned buffer_count)
 {
-    MMRESULT mr;
+    //初始化录音
+	MMRESULT mr;
     WAVEFORMATEX wfx; 
     DWORD flag;
     unsigned i, ptime;
@@ -838,7 +840,7 @@ static pj_status_t init_capture_stream( struct wmme_factory *wf,
     /*
      * Open wave device.
      */
-    mr = waveInOpen(&wmme_strm->hWave.In, 
+    mr = waveInOpen(&wmme_strm->hWave.In, //初始化设备句柄
 		    wf->dev_info[prm->rec_id].deviceId, 
 		    &wfx, (DWORD_PTR)wmme_strm->hEvent, 0, flag);
     if (mr != MMSYSERR_NOERROR) {
@@ -854,7 +856,7 @@ static pj_status_t init_capture_stream( struct wmme_factory *wf,
 	wmme_strm->WaveHdr[i].lpData = pj_pool_zalloc(pool, 
 						      parent->bytes_per_frame);
 	wmme_strm->WaveHdr[i].dwBufferLength = parent->bytes_per_frame;
-	mr = waveInPrepareHeader(wmme_strm->hWave.In, 
+	mr = waveInPrepareHeader(wmme_strm->hWave.In, //waveInAddbuffer 之前调用此函数
 				 &(wmme_strm->WaveHdr[i]),
 				 sizeof(WAVEHDR));
 	if (mr != MMSYSERR_NOERROR) {
@@ -888,6 +890,7 @@ static pj_status_t init_capture_stream( struct wmme_factory *wf,
 /* WMME capture and playback thread. */
 static int PJ_THREAD_FUNC wmme_dev_thread(void *arg)
 {
+	
     struct wmme_stream *strm = (struct wmme_stream*)arg;
     HANDLE events[3];
     unsigned eventCount;
@@ -925,7 +928,7 @@ static int PJ_THREAD_FUNC wmme_dev_thread(void *arg)
      * Loop while not signalled to quit, wait for event objects to be 
      * signalled by WMME capture and play buffer.
      */
-    while (status == PJ_SUCCESS)
+    while (status == PJ_SUCCESS) //数据采集
     {
 
 	DWORD rc;
@@ -936,6 +939,7 @@ static int PJ_THREAD_FUNC wmme_dev_thread(void *arg)
 	    events[2] = events[1];
 	    events[1] = hTemp;
 	}
+
 
 	rc = WaitForMultipleObjects(eventCount, events, FALSE, INFINITE);
 	if (rc < WAIT_OBJECT_0 || rc >= WAIT_OBJECT_0 + eventCount)
@@ -980,8 +984,8 @@ static int PJ_THREAD_FUNC wmme_dev_thread(void *arg)
 		pjmedia_frame pcm_frame, *frame;
 		MMRESULT mr = MMSYSERR_NOERROR;
 
-		//PJ_LOG(5,(THIS_FILE, "Finished writing buffer %d", 
-		//	  wmme_strm->dwBufIdx));
+		//PJ_LOG(3,(THIS_FILE, "写如数到扬声器 %d", 
+	    //		  wmme_strm->dwBufIdx));
 
 		if (strm->fmt_id == PJMEDIA_FORMAT_L16) {
 		    /* PCM mode */
@@ -1003,10 +1007,23 @@ static int PJ_THREAD_FUNC wmme_dev_thread(void *arg)
 		    strm->xfrm->base.bit_info = 0;
 		}
 
-		/* Get frame from application. */
-		//PJ_LOG(5,(THIS_FILE, "xxx %u play_cb", play_cnt++));
-		status = (*strm->play_cb)(strm->user_data, frame);
+		//PJ_LOG(3, (THIS_FILE, "写入%d数到扬声器 %d", frame->size, wmme_strm->dwBufIdx));
 
+	/*
+		int i = 0;
+		char *data = (char *)frame->buf;
+		while (i != frame->size) {
+			printf("%02x ", *data);
+			++data;
+			++i;
+		
+		}
+		printf("\n--------------------------------------------------------------------\n");
+	*/
+		/* Get frame from application. */
+		PJ_LOG(5,(THIS_FILE, "xxx %u play_cb", play_cnt++));
+		status = (*strm->play_cb)(strm->user_data, frame);//此数据会送到到扬声器
+		//status = PJ_SUCCESS;
 		if (status != PJ_SUCCESS)
 		    break;
 
@@ -1042,6 +1059,7 @@ static int PJ_THREAD_FUNC wmme_dev_thread(void *arg)
 		}
 
 		/* Write to the device. */
+	
 		mr = waveOutWrite(wmme_strm->hWave.Out, 
 				  &(wmme_strm->WaveHdr[wmme_strm->dwBufIdx]),
 				  sizeof(WAVEHDR));
@@ -1051,14 +1069,14 @@ static int PJ_THREAD_FUNC wmme_dev_thread(void *arg)
 				  "Failed to write audio frame for playback"));
 		    break;
 		}
-
+		
 		/* Increment position. */
 		if (++wmme_strm->dwBufIdx >= wmme_strm->dwMaxBufIdx)
 		    wmme_strm->dwBufIdx = 0;
 		wmme_strm->timestamp.u64 += strm->param.samples_per_frame /
 					    strm->param.channel_count;
 	    } /* for */
-	}
+	}// PJMEDIA_DIR_PLAYBACK方向
 	else
 	{
 	    struct wmme_channel *wmme_strm = &strm->rec_strm;
@@ -1104,10 +1122,10 @@ static int PJ_THREAD_FUNC wmme_dev_thread(void *arg)
 			wmme_strm->WaveHdr[wmme_strm->dwBufIdx].dwBytesRecorded;
 		pjmedia_frame pcm_frame, *frame;
 
-		/*
-		PJ_LOG(5,(THIS_FILE, "Read %d bytes from buffer %d", cap_len, 
-			  wmme_strm->dwBufIdx));
-		*/
+		
+	//	PJ_LOG(3,(THIS_FILE, "从麦克风读取到数据 %d bytes from buffer %d", cap_len, 
+	//		  wmme_strm->dwBufIdx));
+		
 	    
 		if (strm->fmt_id == PJMEDIA_FORMAT_L16) {
 		    /* PCM mode */
@@ -1146,6 +1164,7 @@ static int PJ_THREAD_FUNC wmme_dev_thread(void *arg)
 		}
 
 		/* Re-add the buffer to the device. */
+		
 		mr = waveInAddBuffer(wmme_strm->hWave.In, 
 				     &(wmme_strm->WaveHdr[wmme_strm->dwBufIdx]), 
 				     sizeof(WAVEHDR));
@@ -1156,10 +1175,22 @@ static int PJ_THREAD_FUNC wmme_dev_thread(void *arg)
 		    break;
 		}
 
+		/*
+		int i = 0;
+		char *data = (char *)frame->buf;
+		while (i != frame->size) {
+			printf("%02x ", *data);
+			++data;
+			++i;
 
+		}
+		printf("\n--------------------------------------------------------------------\n");
+		*/
 		/* Call callback */
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		//PJ_LOG(5,(THIS_FILE, "xxx %u rec_cb", rec_cnt++));
-		status = (*strm->rec_cb)(strm->user_data, frame);
+		status = (*strm->rec_cb)(strm->user_data, frame); //capture 来自麦克风出来数据
+		
 		if (status != PJ_SUCCESS)
 		    break;
 
@@ -1315,7 +1346,7 @@ static pj_status_t factory_create_stream(pjmedia_aud_dev_factory *f,
     }
 
     /* Create and start the thread */
-    status = pj_thread_create(pool, "wmme", &wmme_dev_thread, strm, 0, 0, 
+    status = pj_thread_create(pool, "wmme", &wmme_dev_thread, strm, 0, 0,   //在此处启动线程 
 			      &strm->thread);
     if (status != PJ_SUCCESS) {
 	stream_destroy(&strm->base);

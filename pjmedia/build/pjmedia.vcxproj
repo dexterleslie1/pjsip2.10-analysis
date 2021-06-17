@@ -351,7 +351,7 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>../include;../../pjlib/include;../../pjlib-util/include;../../pjnath/include;../../third_party/portaudio/include;../../third_party/speex/include;../../third_party/build/srtp;../../third_party/srtp/include;../../third_party/srtp/crypto/include;../../third_party/yuv/include;../../third_party/webrtc/src;../..;$(DXSDK_DIR)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_TEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderOutputFile />
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
