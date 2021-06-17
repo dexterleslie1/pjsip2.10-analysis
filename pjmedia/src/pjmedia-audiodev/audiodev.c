@@ -49,6 +49,7 @@ pjmedia_aud_dev_factory* pjmedia_bb10_factory(pj_pool_factory *pf);
 #endif
 
 #if PJMEDIA_AUDIO_DEV_HAS_WMME //windows 32 接口 在这里定义,函数在wmme_dev.c中实现
+
 pjmedia_aud_dev_factory* pjmedia_wmme_factory(pj_pool_factory *pf);
 #endif
 
