@@ -194,6 +194,7 @@ static pjmedia_aud_stream_op stream_op =
 /*
  * Init WMME audio driver.
  */
+
 pjmedia_aud_dev_factory* pjmedia_wmme_factory(pj_pool_factory *pf)
 {
     struct wmme_factory *f;
@@ -313,7 +314,6 @@ on_error:
 }
 
 #else
-
 static void get_dev_names(pjmedia_aud_dev_factory *f)
 {
     PJ_UNUSED_ARG(f);

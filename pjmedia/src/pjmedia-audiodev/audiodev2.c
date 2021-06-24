@@ -24,7 +24,7 @@
 
 
 /* extern functions to create factories */
-#if PJMEDIA_AUDIO_DEV_HAS_PORTAUDIO
+#if PJMEDIA_AUDIO_DEV_HAS_PORTAUDIOPJMEDIA_AUDIO_DEV_HAS_COREAUDIO
 pjmedia_aud_dev_factory* pjmedia_pa_factory(pj_pool_factory *pf);
 #endif
 
@@ -44,13 +44,17 @@ pjmedia_aud_dev_factory* pjmedia_opensl_factory(pj_pool_factory *pf);
 pjmedia_aud_dev_factory* pjmedia_android_factory(pj_pool_factory *pf);
 #endif
 
+
+
 #if PJMEDIA_AUDIO_DEV_HAS_BB10
 pjmedia_aud_dev_factory* pjmedia_bb10_factory(pj_pool_factory *pf);
 #endif
 
+
 #if PJMEDIA_AUDIO_DEV_HAS_WMME //windows 32 接口 在这里定义,函数在wmme_dev.c中实现
 pjmedia_aud_dev_factory* pjmedia_wmme_factory(pj_pool_factory *pf);
 #endif
+
 
 #if PJMEDIA_AUDIO_DEV_HAS_BDIMAD
 pjmedia_aud_dev_factory* pjmedia_bdimad_factory(pj_pool_factory *pf);

@@ -11,9 +11,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\pjmedia-audiodev\audiodev.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\pjmedia-audiodev\audiotest.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -41,10 +38,13 @@
     <ClCompile Include="..\src\pjmedia-audiodev\symb_vas_dev.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\pjmedia-audiodev\wmme_dev.c">
+    <ClCompile Include="..\src\pjmedia-audiodev\wmme_dev1.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\pjmedia-audiodev\wasapi_dev.cpp">
+    <ClCompile Include="..\src\pjmedia-audiodev\audiodev2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pjmedia-audiodev\test.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

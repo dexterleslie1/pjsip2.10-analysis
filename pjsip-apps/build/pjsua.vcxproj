@@ -530,14 +530,7 @@
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug-Static|ARM'">Default</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release-Dynamic|ARM'">Default</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\src\pjsua\pjsua_app_legacy.c">
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release-Static|ARM'">Default</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">Default</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug-Dynamic|ARM'">Default</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Default</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug-Static|ARM'">Default</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release-Dynamic|ARM'">Default</CompileAs>
-    </ClCompile>
+    <ClCompile Include="..\src\pjsua\pjsua_app_legacy.c" />
     <ClCompile Include="..\src\pjsua\wm\main_wm.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Dynamic|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Dynamic|ARM'">true</ExcludedFromBuild>
@@ -547,7 +540,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-Static|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Dynamic|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Dynamic|ARM'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-Dynamic|x64'">true</ExcludedFromBuild>
@@ -569,6 +561,9 @@
       <Project>{23d7679c-764c-4e02-8b29-bb882ceeefe2}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

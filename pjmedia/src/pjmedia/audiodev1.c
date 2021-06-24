@@ -78,7 +78,8 @@ PJ_DEF(pjmedia_aud_subsys*) pjmedia_get_aud_subsys(void)
 PJ_DEF(pj_status_t) pjmedia_aud_driver_init(unsigned drv_idx,
 					    pj_bool_t refresh)
 {
-    pjmedia_aud_driver *drv = &aud_subsys.drv[drv_idx];
+  
+	pjmedia_aud_driver *drv = &aud_subsys.drv[drv_idx];
     pjmedia_aud_dev_factory *f;
     unsigned i, dev_cnt;
     pj_status_t status;

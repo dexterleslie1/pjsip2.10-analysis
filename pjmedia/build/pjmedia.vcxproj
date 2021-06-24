@@ -461,7 +461,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\pjmedia\alaw_ulaw.c" />
     <ClCompile Include="..\src\pjmedia\alaw_ulaw_table.c" />
-    <ClCompile Include="..\src\pjmedia\audiodev.c" />
+    <ClCompile Include="..\src\pjmedia\audiodev1.c" />
     <ClCompile Include="..\src\pjmedia\avi_player.c" />
     <ClCompile Include="..\src\pjmedia\bidirectional.c" />
     <ClCompile Include="..\src\pjmedia\clock_thread.c" />

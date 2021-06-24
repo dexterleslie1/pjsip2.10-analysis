@@ -78,7 +78,7 @@
   <Import Project="..\..\build\vs\pjproject-vs14-common-config.props" />
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4281CA5E-1D48-45D4-A991-2718A454B4BA}</ProjectGuid>
-    <RootNamespace>pjmedia_audiodev</RootNamespace>    
+    <RootNamespace>pjmedia_audiodev</RootNamespace>
     <!-- Specific UWP property -->
     <DefaultLanguage>en-US</DefaultLanguage>
   </PropertyGroup>
@@ -194,7 +194,8 @@
   <!-- Override the PlatformToolset -->
   <PropertyGroup>
     <PlatformToolset>$(BuildToolset)</PlatformToolset>
-    <CharacterSet Condition="'$(API_Family)'!='WinDesktop'"></CharacterSet>
+    <CharacterSet Condition="'$(API_Family)'!='WinDesktop'">
+    </CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -508,7 +509,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\pjmedia-audiodev\audiodev.c" />
+    <ClCompile Include="..\src\pjmedia-audiodev\audiodev2.c" />
     <ClCompile Include="..\src\pjmedia-audiodev\audiotest.c" />
     <ClCompile Include="..\src\pjmedia-audiodev\bdimad_dev.c" />
     <ClCompile Include="..\src\pjmedia-audiodev\errno.c" />
@@ -575,6 +576,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\src\pjmedia-audiodev\test.c" />
     <ClCompile Condition="'$(API_Family)'!='WinDesktop'" Include="..\src\pjmedia-audiodev\wasapi_dev.cpp">
       <CompileAsWinRT>true</CompileAsWinRT>
       <AdditionalUsingDirectories Condition="'$(Configuration)|$(Platform)'=='Release-Static|ARM'">$(WindowsSDK_MetadataPath);%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
@@ -593,7 +595,7 @@
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug-Static|ARM'">MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release-Static|ARM'">MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="..\src\pjmedia-audiodev\wmme_dev.c" />
+    <ClCompile Include="..\src\pjmedia-audiodev\wmme_dev1.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\pjmedia-audiodev\audiodev.h" />

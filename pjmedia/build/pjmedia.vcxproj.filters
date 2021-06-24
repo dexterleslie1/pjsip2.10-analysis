@@ -206,9 +206,6 @@
     <ClCompile Include="..\src\pjmedia\wsola.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\pjmedia\audiodev.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\pjmedia\videodev.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -225,6 +222,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\pjmedia\vid_conf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pjmedia\audiodev1.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

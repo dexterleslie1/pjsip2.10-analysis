@@ -591,6 +591,19 @@ static void on_rx_rtp(pj_ioqueue_key_t *key,
 					udp->rtp_pkt, &bytes_read, 0,
 					&udp->rtp_src_addr,
 					&udp->rtp_addrlen);
+	if (!status) {
+		
+		unsigned char *c = (unsigned char *)udp->rtp_pkt;
+		int i = 0;
+		while (i < bytes_read) {
+			printf("%02x ", *c);
+			++c;
+			++i;
+		}
+
+		printf("\n收到长度为%dRTP数据包\n",bytes_read);
+
+	}
 
 	if (status != PJ_EPENDING && status != PJ_SUCCESS) {	    
 	    if (transport_restarted && last_err == status) {
@@ -623,6 +636,8 @@ static void on_rx_rtp(pj_ioqueue_key_t *key,
 	}
     } while (status != PJ_EPENDING && status != PJ_ECANCELLED &&
 	     udp->started);
+
+	
 }
 
 static void on_rtp_data_sent(pj_ioqueue_key_t *key, 

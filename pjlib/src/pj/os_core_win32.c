@@ -446,7 +446,7 @@ pj_status_t pj_thread_init(void)
     return pj_thread_register("thr%p", main_thread, &thread);
 }
 
-static DWORD WINAPI thread_main(void *param)
+static DWORD WINAPI thread_main(void *param) /*此处不是调用Windows API*/
 {
     pj_thread_t *rec = param;
     DWORD result;
