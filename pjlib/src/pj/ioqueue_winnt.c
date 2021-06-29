@@ -1339,7 +1339,7 @@ PJ_DEF(pj_status_t) pj_ioqueue_connect( pj_ioqueue_key_t *key,
 	hEvent = ioqueue->event_pool[ioqueue->event_count - 1];
 	--ioqueue->event_count;
     } else {
-	hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);//CreateEvent 是 WinAPI CreateEventA的别名。
 	if (hEvent == NULL) {
 	    DWORD dwStatus = GetLastError();
 	    pj_lock_release(ioqueue->lock);

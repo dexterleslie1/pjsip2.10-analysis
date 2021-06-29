@@ -1534,7 +1534,7 @@ static pj_status_t stream_destroy(pjmedia_aud_stream *strm)
     /* Stop the stream thread */
     if (stream->thread)
     {
-	SetEvent(stream->thread_quit_event);
+	SetEvent(stream->thread_quit_event);//µ÷ÓÃWINAPI º¯Êý£»
 	pj_thread_join(stream->thread);
 	pj_thread_destroy(stream->thread);
 	stream->thread = NULL;

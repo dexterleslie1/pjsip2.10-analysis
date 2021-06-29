@@ -224,7 +224,7 @@
     <ClCompile Include="..\src\pjmedia\vid_conf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\pjmedia\audiodev1.c">
+    <ClCompile Include="..\src\pjmedia\audiodev.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

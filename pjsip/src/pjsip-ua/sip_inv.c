@@ -171,7 +171,7 @@ struct tsx_inv_data
  */
 static pj_status_t mod_inv_load(pjsip_endpoint *endpt)
 {
-    pj_str_t allowed[] = {{"INVITE", 6}, {"ACK",3}, {"BYE",3}, {"CANCEL",6},
+    pj_str_t allowed[] = {{"INVITE", 6}, {"ACK",3}, {"BYE",3}, {"CANCEL",6},//结构体初始化
 			    { "UPDATE", 6}};
     pj_str_t accepted = { "application/sdp", 15 };
 
@@ -283,6 +283,9 @@ static void inv_set_state(pjsip_inv_session *inv, pjsip_inv_state state,
 	if (inv->invite_tsx) {
 	    tsx_inv_data = (struct tsx_inv_data*)
 			   inv->invite_tsx->mod_data[mod_inv.mod.id];
+	
+		
+
 	}
 
 	if ((tsx_inv_data && !tsx_inv_data->sdp_done) &&

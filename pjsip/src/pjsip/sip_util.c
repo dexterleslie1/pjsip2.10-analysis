@@ -1231,6 +1231,13 @@ static void stateless_send_transport_cb( void *token,
 		 tdata->via_tp == (void *)stateless_data->cur_transport))
 	    {
 		via->sent_by = tdata->via_addr;
+		/*
+		char *s = malloc(via->sent_by.host.slen + 1);
+		strncpy(s, via->sent_by.host.ptr, via->sent_by.host.slen);
+		
+		printf("****±¾µØÍâÍøIP:%s\n", s);
+		free(s);
+		*/
 
 		/* Better also update tdata via_tp, e.g: CANCEL may need to
 		 * refer to original INVITE tdata.
